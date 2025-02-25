@@ -1,3 +1,4 @@
-JavaSpring
-Gradle
 HelloWorld
+Spring Boot
+Gradle
+Swagger
