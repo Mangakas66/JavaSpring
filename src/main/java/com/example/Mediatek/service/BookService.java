@@ -4,22 +4,39 @@ import com.example.Mediatek.model.Book;
 import com.example.Mediatek.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
+@CrossOrigin(origins = "http://localhost:4200") // TODO do better
 @Service
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
+
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     @GetMapping(("/"))
     public List<Book> findAll() {
-        return bookRepository.findAll();
+        return (List<Book>) bookRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Book findById(@RequestParam long id) {
+        return bookRepository.findById(id).orElseThrow();
+    }
+
+    @PostMapping("/")
+    void addBook(@RequestBody Book book) {
+        bookRepository.save(book);
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteBook(@PathVariable long id) {
+        bookRepository.deleteById(id);
     }
 }
